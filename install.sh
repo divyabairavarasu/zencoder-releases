@@ -118,6 +118,10 @@ install_binaries() {
   done
 
   rm -rf "${tmp_dir}"
+
+  # Clear shell's executable cache so the new binary is picked up immediately
+  hash -r 2>/dev/null || true
+
   green "Binaries installed ✓"
 }
 
@@ -217,6 +221,13 @@ verify_install() {
 # ─────────────────────────── main ───────────────────────────────
 
 main() {
+  # When piped via 'curl | bash', stdin is the curl stream.
+  # Redirect stdin from /dev/tty so interactive prompts (sudo) work,
+  # or from /dev/null if no TTY is available.
+  if [[ ! -t 0 ]]; then
+    exec < /dev/tty 2>/dev/null || exec < /dev/null
+  fi
+
   echo ""
   check_prereqs
 
