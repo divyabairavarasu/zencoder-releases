@@ -66,10 +66,10 @@ resolve_version() {
     return
   fi
 
-  local latest
-  latest="$(curl -fsSL "https://api.github.com/repos/${PUBLIC_REPO}/releases/latest" \
-    | grep '"tag_name"' | head -1 | sed 's/.*"tag_name": *"v\?\([^"]*\)".*/\1/')" \
+  local response latest
+  response="$(curl -fsSL "https://api.github.com/repos/${PUBLIC_REPO}/releases/latest")" \
     || fail "Could not fetch latest release from ${PUBLIC_REPO}."
+  latest="$(echo "${response}" | grep '"tag_name"' | head -1 | cut -d'"' -f4 | sed 's/^v//')"
   [[ -n "${latest}" ]] || fail "Could not parse latest release tag."
   echo "${latest}"
 }
