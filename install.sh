@@ -22,6 +22,17 @@ PUBLIC_REPO="divyabairavarasu/zencoder-releases"
 BINARIES=(zencoder zencoderd zencoder-secrets)
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 
+# Smallest local model — safe for any hardware.
+STARTER_MODEL="qwen2.5-coder:0.5b"
+
+# Free cloud models (mirrors freeCloudModels in cmd/zencoder/main.go).
+CLOUD_MODELS=(
+  "nemotron-3-super:cloud"
+  "minimax-m2.5:cloud"
+  "glm-5:cloud"
+  "qwen3.5:cloud"
+)
+
 # ─────────────────────────── helpers ────────────────────────────
 
 red()    { printf "\033[1;31m%s\033[0m\n" "$*" >&2; }
@@ -150,6 +161,8 @@ setup_service_macos() {
     <true/>
     <key>KeepAlive</key>
     <true/>
+    <key>StandardInputPath</key>
+    <string>/dev/null</string>
     <key>StandardOutPath</key>
     <string>${log_dir}/zencoderd.log</string>
     <key>StandardErrorPath</key>
@@ -218,6 +231,51 @@ verify_install() {
   [[ -n "${version_out}" ]] && echo "  ${version_out}"
 }
 
+# ─────────────────────────── bootstrap models ────────────────────
+
+pull_if_missing() {
+  local model="$1"
+  if ollama list 2>/dev/null | grep -q "${model}"; then
+    green "  ${model} ✓"
+  else
+    echo "  Pulling ${model}..."
+    if ollama pull "${model}" 2>&1; then
+      green "  ${model} ready ✓"
+    else
+      yellow "  Could not pull ${model} — skipping."
+    fi
+  fi
+}
+
+bootstrap_models() {
+  echo ""
+
+  if ! command -v ollama >/dev/null 2>&1; then
+    yellow "Ollama not found in PATH — skipping model bootstrap."
+    echo "  Install Ollama from ollama.com, then run: ollama pull ${STARTER_MODEL}"
+    return
+  fi
+
+  # Check Ollama is reachable (installed but may not be running).
+  if ! curl -sf http://localhost:11434/api/tags >/dev/null 2>&1; then
+    yellow "Ollama is installed but not running — skipping model bootstrap."
+    echo "  Start Ollama (ollama serve) and ZenCoder will auto-load models on next launch."
+    return
+  fi
+
+  blue "Bootstrapping AI models..."
+
+  # Local starter model — works on any hardware.
+  pull_if_missing "${STARTER_MODEL}"
+
+  # Free cloud models — no API keys needed, just ollama signin.
+  for model in "${CLOUD_MODELS[@]}"; do
+    pull_if_missing "${model}"
+  done
+
+  green "Model bootstrap complete ✓"
+}
+
 # ─────────────────────────── main ───────────────────────────────
 
 main() {
@@ -238,6 +296,7 @@ main() {
   install_binaries "${version}" "${platform}"
   setup_service
   verify_install
+  bootstrap_models
 
   echo ""
   green "ZenCoder v${version} installed successfully!"
