@@ -42,16 +42,13 @@ zencoder models`}
     cause: "Ollama cloud models require a signed-in Ollama account (v0.12+).",
     fix: (
       <>
-        <p>Sign in to your Ollama account, then pull the cloud model:</p>
+        <p>Sign in to your Ollama account — ZenCoder handles the rest automatically:</p>
         <CodeBlock
           language="bash"
           code={`# One-time sign-in (creates an account if needed)
 ollama signin
 
-# Pull a cloud model
-ollama pull nemotron-3-super:cloud
-
-# Verify it appears
+# Restart ZenCoder — cloud models will be auto-pulled and launched
 zencoder models`}
         />
         <Callout type="info">
