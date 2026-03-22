@@ -1,5 +1,6 @@
 import { DocsLayout } from "@/components/blocks/docs-layout"
 import { CodeBlock, StepList, Callout, DocHeading, NextStep, Badge } from "@/components/blocks/doc-ui"
+import Image from "next/image"
 
 export default function QuickStartPage() {
   return (
@@ -189,6 +190,23 @@ ZenCoder: This code defines an HTTP server that...`}
         <p className="text-sm text-muted-foreground">
           Search for <strong className="text-foreground">Zencoder AI</strong> in the VS Code Extensions panel (<code className="font-mono text-xs">Ctrl+Shift+X</code> / <code className="font-mono text-xs">Cmd+Shift+X</code>) and click <strong className="text-foreground">Install</strong>.
         </p>
+      </div>
+
+      <Callout type="warning">
+        There is another extension with a similar name on the Marketplace.
+        Make sure you install the one published by <strong className="text-foreground">Divya Bairavarasu</strong> — that is the official ZenCoder AI extension.
+      </Callout>
+
+      <div className="my-6 flex justify-center">
+        <div className="rounded-2xl border border-border overflow-hidden shadow-xl shadow-black/30 max-w-md w-full">
+          <Image
+            src="/screenshots/vscode-marketplace.png"
+            alt="VS Code Marketplace — search for Zencoder AI by Divya Bairavarasu"
+            width={640}
+            height={160}
+            className="w-full h-auto"
+          />
+        </div>
       </div>
 
       <Callout type="tip">
