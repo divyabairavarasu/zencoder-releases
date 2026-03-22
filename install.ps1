@@ -232,6 +232,9 @@ function Main {
     Write-Status "Restart: Start-ScheduledTask -TaskName '$TaskName'"
     Write-Status "Remove:  Unregister-ScheduledTask -TaskName '$TaskName' -Confirm:`$false"
     Write-Host ""
+    Write-Success "Done."
+    Write-Host ""
 }
 
 Main
+exit 0

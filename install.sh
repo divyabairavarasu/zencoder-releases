@@ -315,6 +315,13 @@ main() {
     echo "  Restart: sudo systemctl restart zencoderd"
   fi
   echo ""
+  green "Done ✓"
+  echo ""
 }
 
 main "$@"
+
+# Close stdin and exit cleanly — prevents the script from hanging when
+# piped via 'curl | bash' after stdin was redirected to /dev/tty above.
+exec < /dev/null
+exit 0
