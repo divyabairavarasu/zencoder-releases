@@ -60,6 +60,12 @@ ollama pull llama3
 ollama list`}
                 />
                 <p className="text-sm">Expected output: model appears in the list with its size.</p>
+                <Callout type="tip">
+                  <strong className="text-foreground">Free cloud models:</strong> Ollama also offers powerful cloud models (e.g.{" "}
+                  <code className="font-mono text-sm">nemotron-3-super:cloud</code>) that run on Ollama&apos;s servers at no cost.
+                  These require Ollama v0.12+ and a one-time sign-in:
+                  <CodeBlock language="bash" code={`ollama signin\nollama pull nemotron-3-super:cloud`} />
+                </Callout>
               </>
             ),
           },

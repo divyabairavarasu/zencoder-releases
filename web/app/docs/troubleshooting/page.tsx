@@ -37,6 +37,32 @@ zencoder models`}
     ),
   },
   {
+    id: "cloud-models-not-loading",
+    symptom: "Cloud models (:cloud) not loading / pull fails with auth error",
+    cause: "Ollama cloud models require a signed-in Ollama account (v0.12+).",
+    fix: (
+      <>
+        <p>Sign in to your Ollama account, then pull the cloud model:</p>
+        <CodeBlock
+          language="bash"
+          code={`# One-time sign-in (creates an account if needed)
+ollama signin
+
+# Pull a cloud model
+ollama pull nemotron-3-super:cloud
+
+# Verify it appears
+zencoder models`}
+        />
+        <Callout type="info">
+          This only applies to models with the <code className="font-mono text-sm">:cloud</code> tag.
+          Local models (e.g. <code className="font-mono text-sm">qwen2.5-coder:7b</code>) do not require sign-in.
+          Make sure you are running Ollama v0.12 or later — run <code className="font-mono text-sm">ollama --version</code> to check.
+        </Callout>
+      </>
+    ),
+  },
+  {
     id: "first-request-slow",
     symptom: "First response takes 30–60 seconds",
     cause: "The local model is being loaded into memory for the first time.",

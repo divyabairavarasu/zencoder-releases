@@ -21,9 +21,10 @@ const providers = [
     free: true,
     models: ["nemotron-3-super:cloud", "qwen2.5-coder:7b", "llama3.2:3b", "mistral:7b", "codellama:7b", "phi3:mini", "deepseek-coder:6.7b"],
     steps: [
-      { title: "Install", content: <><p>macOS: <code className="font-mono text-sm text-primary">brew install ollama</code> or download from <strong>ollama.com</strong>.</p></> },
+      { title: "Install", content: <><p>macOS: <code className="font-mono text-sm text-primary">brew install ollama</code> or download from <strong>ollama.com</strong>. Requires Ollama v0.12 or later for cloud models.</p></> },
       { title: "Start service", content: <CodeBlock language="bash" code={`ollama serve`} /> },
-      { title: "Pull a model", content: <CodeBlock language="bash" code={`# Recommended for coding\nollama pull qwen2.5-coder:7b\n\n# Or a lightweight fast model\nollama pull llama3.2:3b\n\nollama list`} /> },
+      { title: "Sign in for cloud models", content: <><p>Cloud models (e.g. <code className="font-mono text-sm">nemotron-3-super:cloud</code>) run on Ollama&apos;s infrastructure for free but require a signed-in Ollama account:</p><CodeBlock language="bash" code={`# Sign in to your Ollama account (one-time setup)\nollama signin\n\n# Then pull a cloud model\nollama pull nemotron-3-super:cloud`} /><p className="text-sm text-muted-foreground mt-2">No sign-in needed for local models — only for <code className="font-mono text-sm">:cloud</code> variants.</p></> },
+      { title: "Pull a local model", content: <CodeBlock language="bash" code={`# Recommended for coding\nollama pull qwen2.5-coder:7b\n\n# Or a lightweight fast model\nollama pull llama3.2:3b\n\nollama list`} /> },
       { title: "ZenCoder auto-detects it", content: <><p>Zencoderd discovers Ollama at <code className="font-mono text-sm">localhost:11434</code> automatically. Run <code className="font-mono text-sm">zencoder models</code> to confirm.</p></> },
     ],
   },
