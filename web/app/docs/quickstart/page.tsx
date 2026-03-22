@@ -14,10 +14,10 @@ export default function QuickStartPage() {
         You can add cloud keys later with <code className="font-mono text-sm">zencoder-secrets</code>.
       </Callout>
 
-      {/* ── Pre-install: macOS ── */}
-      <DocHeading level={2}>Pre-install: macOS setup</DocHeading>
+      {/* ── Pre-install ── */}
+      <DocHeading level={2}>Pre-install setup</DocHeading>
       <p className="text-muted-foreground mb-4">
-        Install the tools ZenCoder uses as its AI backends.
+        Install the tools ZenCoder uses as its AI backends. These steps work on macOS, Linux, and Windows.
       </p>
 
       <DocHeading level={3}>1. Install Ollama (local AI, free)</DocHeading>
@@ -119,16 +119,35 @@ ollama list`}
 
       <DocHeading level={3}>Option 1 — CLI &amp; zencoder-secrets</DocHeading>
       <p className="text-muted-foreground mb-4">
-        Installs the <code className="font-mono text-sm">zencoder</code> CLI and <code className="font-mono text-sm">zencoder-secrets</code> in one step.
-        Works on macOS, Linux, and Windows WSL2.
+        Installs <code className="font-mono text-sm">zencoder</code>, <code className="font-mono text-sm">zencoderd</code>, and <code className="font-mono text-sm">zencoder-secrets</code> in one step.
+        The daemon is registered to start automatically on login.
       </p>
+
+      <DocHeading level={3}>macOS &amp; Linux</DocHeading>
       <CodeBlock
         language="bash"
         code={`curl -fsSL https://raw.githubusercontent.com/divyabairavarasu/zencoder-releases/main/install.sh | bash`}
       />
       <Callout type="info">
-        The install script places binaries in <code className="font-mono text-sm">~/.local/bin</code> (or your <code className="font-mono text-sm">$GOPATH/bin</code> if Go is available).
-        Make sure that directory is on your <code className="font-mono text-sm">PATH</code>.
+        The install script places binaries in <code className="font-mono text-sm">/usr/local/bin</code> and registers <code className="font-mono text-sm">zencoderd</code> as a
+        LaunchAgent (macOS) or systemd service (Linux).
+      </Callout>
+
+      <DocHeading level={3}>Windows (PowerShell)</DocHeading>
+      <CodeBlock
+        language="powershell"
+        code={`irm https://raw.githubusercontent.com/divyabairavarasu/zencoder-releases/main/install.ps1 | iex`}
+      />
+      <Callout type="info">
+        Run this in a <strong className="text-foreground">PowerShell</strong> terminal (not Command Prompt).
+        Binaries are installed to <code className="font-mono text-sm">%LOCALAPPDATA%\ZenCoder\bin</code> and added to your user <code className="font-mono text-sm">PATH</code> automatically.
+        The daemon runs as a scheduled task that starts on login.
+        Restart your terminal after install so the new PATH takes effect.
+      </Callout>
+
+      <Callout type="tip">
+        <strong className="text-foreground">Windows + WSL2:</strong> If you prefer a Linux environment on Windows,
+        you can also run the bash installer inside WSL2 — it works the same as on native Linux.
       </Callout>
 
       <StepList
