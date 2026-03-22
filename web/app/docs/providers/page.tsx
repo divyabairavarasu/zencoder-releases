@@ -2,8 +2,9 @@ import { DocsLayout } from "@/components/blocks/docs-layout"
 import { CodeBlock, StepList, Callout, DocHeading, NextStep, Badge } from "@/components/blocks/doc-ui"
 import { Lock, Shield, Eye, Server } from "lucide-react"
 
-/** Pre-loaded free Ollama cloud models — no API key required */
+/** Pre-loaded free Ollama models — local downloads + free cloud models (no API key required) */
 const ollamaFreeModels = [
+  { name: "nemotron-3-super:cloud", pull: "ollama pull nemotron-3-super:cloud", tag: "★ Most powerful · free cloud", size: "Cloud" },
   { name: "qwen2.5-coder:7b", pull: "ollama pull qwen2.5-coder:7b", tag: "Best for code", size: "4.7GB" },
   { name: "llama3.2:3b", pull: "ollama pull llama3.2:3b", tag: "Fast · 2GB" , size: "2.0GB" },
   { name: "mistral:7b", pull: "ollama pull mistral:7b", tag: "General purpose", size: "4.1GB" },
@@ -18,7 +19,7 @@ const providers = [
     name: "Ollama",
     type: "Local",
     free: true,
-    models: ["qwen2.5-coder:7b", "llama3.2:3b", "mistral:7b", "codellama:7b", "phi3:mini", "deepseek-coder:6.7b"],
+    models: ["nemotron-3-super:cloud", "qwen2.5-coder:7b", "llama3.2:3b", "mistral:7b", "codellama:7b", "phi3:mini", "deepseek-coder:6.7b"],
     steps: [
       { title: "Install", content: <><p>macOS: <code className="font-mono text-sm text-primary">brew install ollama</code> or download from <strong>ollama.com</strong>.</p></> },
       { title: "Start service", content: <CodeBlock language="bash" code={`ollama serve`} /> },
