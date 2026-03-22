@@ -234,6 +234,9 @@ function Main {
     Write-Host ""
     Write-Success "Done."
     Write-Host ""
+    Write-Host "  If this window is still open, press Ctrl+C or close it to exit." -ForegroundColor Yellow
+    Write-Host ""
+    exit 0
 }
 
 Main

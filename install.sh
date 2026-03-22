@@ -317,6 +317,10 @@ main() {
   echo ""
   green "Done ✓"
   echo ""
+  yellow "If this terminal is still open, press Ctrl+C to exit."
+  echo ""
+  # Exit from inside main — most reliable way to terminate in all invocation styles.
+  exit 0
 }
 
 main "$@"
