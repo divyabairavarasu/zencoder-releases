@@ -27,7 +27,7 @@
 
 ## What is ZenCoder?
 
-ZenCoder is an AI coding assistant that routes your requests intelligently across **free and cheap local/cloud models** — so you get great answers without worrying about token costs. It is free to install and use.
+ZenCoder is an open-source AI coding assistant that routes your requests intelligently across **free and cheap local/cloud models** — so you get great answers without worrying about token costs.
 
 Run it as a CLI, as a background daemon, or as a VSCode extension. It works with your existing models (Ollama, LM Studio, OpenRouter, Anthropic, OpenAI, and more) and picks the right one for each task automatically.
 
@@ -44,7 +44,7 @@ ZenCoder's intelligent router dispatches each request to the best available mode
 Designed from the ground up for **free and near-free** model tiers. Run Ollama or LM Studio locally, use free cloud tiers, or bring your own API key. You control the spend.
 
 ### 🔑 BYOK — Bring Your Own Key
-Securely store API keys for 7 providers (OpenAI, Anthropic, Google Gemini, NVIDIA, Meta, DeepSeek, Qwen) using `zencoder-secrets`. Models are auto-discovered from the provider API where supported (OpenAI, Google) or via curated lists (Anthropic, others). Keys never leave your machine.
+Securely store API keys for 7+ providers (Anthropic, OpenAI, Gemini, Mistral, Groq, Cohere, Together) in one place. Keys are encrypted at rest and never leave your machine.
 
 ### 🛠 Agent Mode
 Full agentic loop: ZenCoder can read files, search your codebase, propose edits, and iterate — all within your workspace. Like a junior developer that never sleeps.
@@ -180,42 +180,15 @@ zencoder health
 
 ## Adding API Keys (BYOK)
 
-Use `zencoder-secrets` to manage API keys. Only the provider name and key are needed — models are auto-discovered.
-
 ```bash
-# Add a key (provider name + API key is all you need)
-zencoder-secrets add --provider openai       # models fetched live from OpenAI API
-zencoder-secrets add --provider anthropic    # curated model list (Haiku 4.5, Sonnet 4)
-zencoder-secrets add --provider google       # models fetched live from Gemini API
-
-# NVIDIA requires a per-model key
-zencoder-secrets add --provider nvidia --model nvidia/llama-3.3-70b-instruct
-
-# Other providers (models from curated list)
-zencoder-secrets add --provider deepseek
-zencoder-secrets add --provider meta
-zencoder-secrets add --provider qwen
-
-# List registered keys
+# Interactive key management
+zencoder-secrets add anthropic
+zencoder-secrets add openai
 zencoder-secrets list
-
-# Remove a provider
-zencoder-secrets delete --provider openai
+zencoder-secrets remove groq
 ```
 
-Supported providers: `openai`, `anthropic`, `google`, `nvidia`, `meta`, `deepseek`, `qwen`
-
-### How models are discovered
-
-| Provider | Model Discovery | Notes |
-|----------|----------------|-------|
-| **OpenAI** | Live API (`GET /v1/models`) | Filtered to chat-capable models; fallback to curated list on error |
-| **Google Gemini** | Live API (`GET /v1beta/models`) | Filtered to `generateContent`-capable; fallback to curated list |
-| **Anthropic** | Curated list | Anthropic has no models API; list maintained with date-versioned IDs |
-| **NVIDIA** | Per-model BYOK | Requires `--model` flag; key is scoped to a specific model |
-| **DeepSeek** | Curated list | `deepseek-chat`, `deepseek-reasoner` |
-| **Meta** | Curated list | Llama 4 models |
-| **Qwen** | Curated list | `qwen-plus`, `qwen-turbo` |
+Supported providers: `anthropic`, `openai`, `gemini`, `mistral`, `groq`, `cohere`, `together`
 
 ---
 
@@ -271,3 +244,27 @@ MIT — see [LICENSE](LICENSE).
 **ZenCoder** · "Best things in life are almost free :P"
 
 </div>
+
+## Project Memory
+
+ZenCoder automatically loads project-specific instructions from your workspace to give the agent
+relevant context on every run. Create any one of the following files in your repository root:
+
+| File | Purpose |
+|------|---------|
+| `.zencoder/instructions.md` | ZenCoder-specific project instructions (highest priority) |
+| `CLAUDE.md` | Shared AI coding instructions (compatible with Claude Code) |
+| `AGENTS.md` | Shared AI agent instructions |
+
+The first file found (in the order above) is loaded and injected into the system prompt under
+**"## Project Instructions"**. Files are capped at 8 KB. This is the **project memory** contract —
+keep it concise and focused on conventions the AI should always follow.
+
+**Example `.zencoder/instructions.md`:**
+```markdown
+# Project Instructions
+
+- Use Go 1.22+ idioms; no generics until the team upgrades.
+- All exported functions must have doc comments.
+- Run `go test ./...` before every commit.
+```
